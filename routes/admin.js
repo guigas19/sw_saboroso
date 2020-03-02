@@ -3,6 +3,8 @@ var users = require("./../inc/users");
 var admin = require("./../inc/admin");
 var menus = require("./../inc/menus");
 var reservations = require("./../inc/reservations");
+var contacts = require("./../inc/contacts");
+var emails = require("./../inc/emails");
 var moment = require("moment");
 var router = express.Router();
 
@@ -72,11 +74,38 @@ router.post("/login", function(req, res, next){
 });
 
 router.get("/contacts", function(req, res, next){
-    res.render("admin/contacts", admin.getParams(req));
+
+    contacts.getContacts().then(data=>{
+        res.render("admin/contacts", admin.getParams(req, {
+            data
+        }));
+    });    
+});
+
+router.delete("/contacts/:id", function(req, res, next){
+
+    contacts.delete(req.params.id).then(results=>{
+        res.send(results);
+    }).catch(err=>{
+        res.send(err);
+    });
 });
 
 router.get("/emails", function(req, res, next){
-    res.render("admin/emails", admin.getParams(req));
+
+    emails.getEmails().then(data=>{
+        res.render("admin/emails", admin.getParams(req, {
+            data
+        }));
+    });   
+});
+
+router.delete("/emails/:id", function(req, res, next){
+    emails.delete(req.params.id).then(results=>{
+        res.send(results);
+    }).catch(err=>{
+        res.send(err);
+    });
 });
 
 router.get("/menus", function(req, res, next){
@@ -136,7 +165,43 @@ router.delete("/reservations/:id", function(req, res, next){
 });
 
 router.get("/users", function(req, res, next){
-    res.render("admin/users", admin.getParams(req));
+
+    users.getUsers().then(data => {
+        res.render("admin/users", admin.getParams(req, {
+            data
+        }));
+    });
+
+    
+});
+
+router.post("/users", function(req, res, next){
+
+    users.save(req.fields).then(results => {
+        res.send(results);
+    }).catch(err => {
+        res.send(err);
+    });
+    
+});
+
+router.post("/users/password-change", function(req, res, next){
+    users.changePassword(req).then(results => {
+        res.send(results);
+    }).catch(err => {
+        res.send({
+            error: err
+        });
+    });
+});
+
+router.delete("/users/:id", function(req, res, next){
+
+    users.delete(req.params.id).then(results => {
+        res.send(results);
+    }).catch(err => {
+        res.send(err);
+    });
 });
 
 module.exports = router;
