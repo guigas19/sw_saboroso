@@ -19,7 +19,7 @@ class Pagination {
 
         this.params.push(
             this.currentPage * this.itensPerPage,
-            this.itensPerpage
+            this.itensPerPage
         );        
 
         return new Promise((resolve, reject) => {
@@ -29,7 +29,7 @@ class Pagination {
                     reject(err);
                 }else{
 
-                    this.data = results;
+                    this.data = results[0];
                     this.total = results[1][0].FOUND_ROWS;                    
                     this.totalPages = Math.ceil(this.total / this.itensPerPage);
                     this.currentPage++;
