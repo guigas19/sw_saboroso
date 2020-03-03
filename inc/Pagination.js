@@ -20,17 +20,17 @@ class Pagination {
         this.params.push(
             this.currentPage * this.itensPerPage,
             this.itensPerpage
-        );
+        );        
 
         return new Promise((resolve, reject) => {
             
-            conn.query([this.query, "SELECT FOUND_ROWS() AS FOUND_ROWS"].join(";"), this.params, (err, results)=>{
-                if(err){
+            conn.query([this.query, "SELECT FOUND_ROWS() AS FOUND_ROWS"].join(";"), this.params, (err, results)=>{                
+                if(err){                    
                     reject(err);
                 }else{
 
-                    this.data = results[0];
-                    this.total = results[1][0].FOUND_ROWS;
+                    this.data = results;
+                    this.total = results[1][0].FOUND_ROWS;                    
                     this.totalPages = Math.ceil(this.total / this.itensPerPage);
                     this.currentPage++;
 

@@ -53,7 +53,7 @@ class HcodeGrid {
 
         if(this.formCreate){
             this.formCreate.save({
-                sucess:()=>{
+                success:()=>{
                     this.fireEvent('afterFormCreate');
                 },
                 failure:()=>{
@@ -67,7 +67,7 @@ class HcodeGrid {
 
         if(this.formUpdate){
             this.formUpdate.save({
-                sucess:()=>{
+                success:()=>{
                     this.fireEvent('afterFormUpdate');
                 },
                 failure:()=>{
