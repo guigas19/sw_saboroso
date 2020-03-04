@@ -149,18 +149,15 @@ module.exports = function(io){
         let start = (req.query.start) ? req.query.start :moment().subtract(1, "year").format("YYYY-MM-DD");
         let end = (req.query.start) ? req.query.end :moment().format("YYYY-MM-DD");
 
-        reservations.getReservations(
-                req.query.page,
-                req.query.start,
-                req.query.end
-            ).then(data => {
+        reservations.getReservations(req).then(pag => {
             res.render("admin/reservations", admin.getParams(req, {
                 date:{
                     start,
                     end
                 },
-                data,
-                moment
+                data: pag.data,
+                moment,
+                links: pag.links
             }));
         });
 

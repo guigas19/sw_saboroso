@@ -15,24 +15,39 @@ module.exports = {
           });
     },
 
-    getReservations(page, dtstart, dtend){
+    getReservations(req){
 
-        if(!page) page = 1;
-        let params = [];
+        return new Promise((resolve, reject) => {
 
-        if (dtstart && dtend) params.push(dtstart, dtend);
+            let page = req.query.page;
+            let dtstart = req.query.start;
+            let dtend = req.query.end;
 
-        let pag = new Pagination(
-            `
-                SELECT SQL_CALC_FOUND_ROWS *
-                FROM tb_reservations
-                ${(dtstart && dtend) ? 'WHERE date BETWEEN ? AND ?' : ''}
-                ORDER BY name LIMIT ?, ?
-            `,
-            params
-        );        
+            if(!page) page = 1;
+            let params = [];
+    
+            if (dtstart && dtend) params.push(dtstart, dtend);
+    
+            let pag = new Pagination(
+                `
+                    SELECT SQL_CALC_FOUND_ROWS *
+                    FROM tb_reservations
+                    ${(dtstart && dtend) ? 'WHERE date BETWEEN ? AND ?' : ''}
+                    ORDER BY name LIMIT ?, ?
+                `,
+                params
+            );        
+    
+            pag.getPage(page).then(data => {
+                resolve({
+                    data,
+                    links: pag.getNavagations(req.query)
+                });
+            });
+            
 
-        return pag.getPage(page);
+        });
+
 
         // return new Promise((resolve, reject) => {
         //     conn.query(`
@@ -169,7 +184,9 @@ module.exports = {
                 }
             });
         });
-    }
+    },
+
+    
 
 };
 
